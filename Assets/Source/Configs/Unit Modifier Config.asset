@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52f6a1da8786334f9c7cb7a022f4d73, type: 3}
+  m_Name: Unit Modifier Config
+  m_EditorClassIdentifier: 
+  <UnitBaseConfig>k__BackingField: {fileID: 11400000, guid: 9257442529248914aaf54558f0a0583d, type: 2}
+  <Shapes>k__BackingField:
+  - ShapeType: 0
+    ShapeMesh: {fileID: 6868368794359222981, guid: 413e158e72bc0e14ab906c436d0a478d, type: 3}
+    ShapeStatsModifier:
+      HP: 100
+      ATK: 10
+  - ShapeType: 1
+    ShapeMesh: {fileID: 5667014079644355192, guid: 27c36787b6c2baf4d88c3fdadc777ca0, type: 3}
+    ShapeStatsModifier:
+      HP: 50
+      ATK: 20
+  <Sizes>k__BackingField:
+  - SizeType: 0
+    SizeStatsModifier:
+      HP: 50
+  - SizeType: 1
+    SizeStatsModifier:
+      HP: -50
+  <Colors>k__BackingField:
+  - ColorType: 0
+    ColorStatsModifier:
+      HP: 0
+      ATK: -15
+      SPEED: 10
+      ATKSPD: 4
+  - ColorType: 1
+    ColorStatsModifier:
+      HP: -50
+      ATK: 20
+      SPEED: -5
+      ATKSPD: 0
+  - ColorType: 2
+    ColorStatsModifier:
+      HP: 200
+      ATK: 40
+      SPEED: -9
+      ATKSPD: 0
