@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7810374139402446949}
   - component: {fileID: 7602368514895125408}
   - component: {fileID: 5906320059354322262}
+  - component: {fileID: 1338342562276199925}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -86,3 +87,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &1338342562276199925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667014079644355192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb08e5ec3e812b419f3669299265dd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MeshRenderer>k__BackingField: {fileID: 5906320059354322262}
+  <Model>k__BackingField: {fileID: 5667014079644355192}

@@ -37,6 +37,11 @@ public class UnitSpawnController
         }
     }
 
+    public void Cleanup()
+    {
+        _spawner.Cleanup();
+    }
+
     public void RequestRandomize()
     {
         if (_spawner != null)

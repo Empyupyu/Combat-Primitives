@@ -4,11 +4,13 @@ using UnityEngine;
 
 public abstract class StateMachineMono<T> : MonoBehaviour, IStateSwitcher<T> where T : Enum
 {
+    public bool IsInitialized { get; private set; }
     protected StateMachine<T> _stateMachine;
 
     public void SetStateMachine(StateMachine<T> stateMachine)
     {
         _stateMachine = stateMachine;
+        IsInitialized = true;
     }
 
     public UniTask SwitchState(T stateName)
@@ -16,7 +18,7 @@ public abstract class StateMachineMono<T> : MonoBehaviour, IStateSwitcher<T> whe
         return _stateMachine.SwitchState(stateName);
     }
 
-    public void Tick()
+    private void Update()
     {
         _stateMachine?.Tick();
     }

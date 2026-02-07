@@ -4,13 +4,17 @@ public class LevelEndState : IState<GameState>
 {
     public override GameState Key => GameState.LevelEndState;
 
-    public LevelEndState(IStateSwitcher<GameState> stateSwitcher) : base(stateSwitcher)
+    private readonly UnitSpawnController _unitSpawnController;
+
+    public LevelEndState(IStateSwitcher<GameState> stateSwitcher,
+        UnitSpawnController unitSpawnController) : base(stateSwitcher)
     {
+        _unitSpawnController = unitSpawnController;
     }
 
     public override async UniTask Enter()
     {
-        //cleanup units
+        _unitSpawnController.Cleanup();
 
         await _stateSwitcher.SwitchState(GameState.MenuState);
     }

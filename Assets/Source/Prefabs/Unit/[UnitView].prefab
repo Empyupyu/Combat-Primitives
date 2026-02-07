@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 953683695783437507}
   - component: {fileID: 2540714157837089359}
   - component: {fileID: 6425801816372910510}
+  - component: {fileID: -7180416567137659537}
   m_Layer: 0
   m_Name: '[UnitView]'
   m_TagString: Untagged
@@ -45,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365e957fe2866d64c8e2aec9e21ae6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Model>k__BackingField: {fileID: 0}
+  <Shape>k__BackingField: {fileID: 0}
   <Agent>k__BackingField: {fileID: 6425801816372910510}
-  <UnitHealthView>k__BackingField: {fileID: 0}
+  <UnitStateMachineMono>k__BackingField: {fileID: -7180416567137659537}
 --- !u!195 &6425801816372910510
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -57,7 +58,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 226137914669898700}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.3
+  m_Radius: 0.1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -70,3 +71,15 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-7180416567137659537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226137914669898700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5940a317169343c4c9402966042273bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

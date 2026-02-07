@@ -5,5 +5,4 @@ using UnityEngine;
 public class LevelConfig : ScriptableObject
 {
     [field: SerializeField] public List<TeamSettings> Teams { get; private set; }
-    [field: SerializeField] public string LevelKeyPath { get; private set; }
 }

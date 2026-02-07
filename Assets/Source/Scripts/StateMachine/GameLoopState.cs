@@ -2,30 +2,48 @@
 
 public class GameLoopState : IState<GameState>
 {
-    private readonly DamageService _damageService;
-
     public override GameState Key => GameState.GameLoopState;
 
+    private readonly BattleController _battleController;
+    private readonly GameData _gameData;
+
     public GameLoopState(IStateSwitcher<GameState> stateSwitcher,
-        DamageService damageService) : base(stateSwitcher)
+        BattleController battleController,
+        GameData gameData) : base(stateSwitcher)
     {
-        _damageService = damageService;
+        _battleController = battleController;
+        _gameData = gameData;
     }
 
     public override async UniTask Enter()
     {
-        _damageService.AllUnitsInTeamDeath += LevelEnd;
+        _battleController.OnBattleFinished += LevelEnd;
+
+        SetUnitsChaseState();
+
         await UniTask.CompletedTask;
+    }
+
+    private void SetUnitsChaseState()
+    {
+        foreach (var kvp in _gameData.CurrentUnitsInBattle)
+        {
+            foreach (var unitView in kvp.Value)
+            {
+                unitView.UnitStateMachineMono.SwitchState(UnitState.Chase).Forget();
+            }
+        }
     }
 
     private void LevelEnd()
     {
-        _damageService.AllUnitsInTeamDeath -= LevelEnd;
+        _battleController.OnBattleFinished -= LevelEnd;
         _stateSwitcher.SwitchState(GameState.LevelEndState);
     }
 
     public override async UniTask Exit()
     {
-        await UniTask.CompletedTask;
+        int fakeDelay = 1000;
+        await UniTask.Delay(fakeDelay);
     }
 }

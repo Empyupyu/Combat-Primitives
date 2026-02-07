@@ -9,36 +9,73 @@ public class UnitSpawner
     private readonly StatsFactory _statsFactory;
     private readonly StatsCreator _statsCreator;
     private readonly UnitModifierConfig _unitModifierConfig;
-    private Dictionary<UnitTeam, List<UnitView>> _units;
+    private readonly BattleController _battleController;
+    private readonly DamageService _damageService;
+    private readonly GameData _gameData;
+    private readonly ShapeViewPoolService _shapeViewPoolService;
 
     public UnitSpawner(
         UnitSpawnStrategy unitSpawnStrategy,
         UnitView unitPrefab,
         StatsFactory statsFactory,
         StatsCreator statsCreator,
-        UnitModifierConfig unitModifierConfig)
+        UnitModifierConfig unitModifierConfig,
+        BattleController battleController,
+        DamageService damageService,
+        GameData gameData)
     {
         _unitSpawnStrategy = unitSpawnStrategy;
         _unitPrefab = unitPrefab;
         _statsFactory = statsFactory;
         _statsCreator = statsCreator;
         _unitModifierConfig = unitModifierConfig;
+        _battleController = battleController;
+        _damageService = damageService;
+        _gameData = gameData;
 
-        _units = new Dictionary<UnitTeam, List<UnitView>>();
+        _shapeViewPoolService = new ShapeViewPoolService(_unitModifierConfig);
     }
 
     public void Spawn(UnitTeam unitTeam, Vector3 startPoint, Vector3 otherTeamPoint)
     {
         UnitView unitView = CreateUnitView(startPoint, otherTeamPoint);
 
-        if (!_units.ContainsKey(unitTeam)) 
+        if (!unitView.UnitStateMachineMono.IsInitialized)
         {
-            _units[unitTeam] = new List<UnitView>(); 
+            InitializeStateMachine(unitView);
         }
 
-        _units[unitTeam].Add(unitView);
+        AddUnit(unitTeam, unitView);
 
         InitializeUnit(unitTeam, unitView);
+
+        _battleController.Register(unitView);
+    }
+
+    private void AddUnit(UnitTeam unitTeam, UnitView unitView)
+    {
+        _gameData.CurrentUnitsInBattle ??= new Dictionary<UnitTeam, List<UnitView>>();
+
+        if (!_gameData.CurrentUnitsInBattle.ContainsKey(unitTeam))
+        {
+            _gameData.CurrentUnitsInBattle[unitTeam] = new List<UnitView>();
+        }
+        
+        _gameData.CurrentUnitsInBattle[unitTeam].Add(unitView);
+    }
+
+    private void InitializeStateMachine(UnitView unitView)
+    {
+        List<IState<UnitState>> states = new List<IState<UnitState>>()
+        {
+            new IdleState(unitView.UnitStateMachineMono),
+            new ChaseState(unitView.UnitStateMachineMono, unitView, _battleController),
+            new AttackState(unitView.UnitStateMachineMono, unitView, _damageService),
+        };
+
+        StateMachine<UnitState> stateMachine = new StateMachine<UnitState>(states);
+
+        unitView.UnitStateMachineMono.SetStateMachine(stateMachine);
     }
 
     private UnitView CreateUnitView(Vector3 startPoint, Vector3 otherTeamPoint)
@@ -46,9 +83,17 @@ public class UnitSpawner
         Vector3 spawnPoint = _unitSpawnStrategy.CalculateSpawnPosition(startPoint);
         Vector3 lookPoint = new Vector3(spawnPoint.x, otherTeamPoint.y, otherTeamPoint.z);
 
-        UnitView unitView = GameObject.Instantiate(_unitPrefab);
+        if(_gameData.UnitViewPool == null)
+        {
+            int totalUnits = _gameData.Level.LevelConfig.Teams.Sum(team => team.UnitCount);
+            _gameData.UnitViewPool = new ObjectPool<UnitView>(_unitPrefab, totalUnits);
+        }
+
+        UnitView unitView = _gameData.UnitViewPool.Get();
         unitView.transform.position = spawnPoint;
         unitView.transform.LookAt(lookPoint);
+        unitView.gameObject.SetActive(true);
+        unitView.ResetView();
         return unitView;
     }
 
@@ -56,25 +101,44 @@ public class UnitSpawner
     {
         UnitStatsSetup unitStatsSetup = _statsCreator.GetStatSetup();
 
-        if (unitView.Model != null)
+        if (unitView.Shape != null)
         {
-            GameObject.Destroy(unitView.Model);
+            _shapeViewPoolService.Return(unitView.Shape);
         }
 
-        GameObject model = GameObject.Instantiate(_unitModifierConfig.Shapes.
-          First(x => x.ShapeType == unitStatsSetup.ShapeType).ShapeMesh, unitView.transform);
-
-        unitView.SetModel(model);
+        CreateShapeView(unitView, unitStatsSetup);
+        ApplyVisualChanges(unitView, unitStatsSetup);
 
         IStats stats = _statsFactory.Create(unitStatsSetup.ShapeType, unitStatsSetup.SizeType, unitStatsSetup.ColorType);
 
-        Unit unit = new Unit(unitTeam,stats);
+        Unit unit = new Unit(unitTeam, stats);
         unitView.SetUnit(unit);
+    }
+
+    private void ApplyVisualChanges(UnitView unitView, UnitStatsSetup unitStatsSetup)
+    {
+        var sizeMod = _unitModifierConfig.GetSize(unitStatsSetup.SizeType);
+        var colorMod = _unitModifierConfig.GetColor(unitStatsSetup.ColorType);
+
+        unitView.Shape.transform.localScale = sizeMod.OriginalSize * sizeMod.Size;
+        unitView.SetColor(colorMod.ColorMaterial);
+    }
+
+    private void CreateShapeView(UnitView unitView, UnitStatsSetup unitStatsSetup)
+    {
+        ShapeType type = unitStatsSetup.ShapeType;
+        
+        ShapeView shapeView = _shapeViewPoolService.Get(type);
+        shapeView.transform.SetParent(unitView.transform);
+        shapeView.transform.localPosition = Vector3.zero; 
+        shapeView.gameObject.SetActive(true);
+
+        unitView.SetShape(shapeView);
     }
 
     public void RandomizeUnits()
     {
-        foreach (var pair in _units)
+        foreach (var pair in _gameData.CurrentUnitsInBattle)
         {
             UnitTeam team = pair.Key;
             List<UnitView> views = pair.Value;
@@ -85,5 +149,23 @@ public class UnitSpawner
             }
         }
     }
-}
 
+    public void Cleanup()
+    {
+        foreach (var kvp in _gameData.CurrentUnitsInBattle)
+        {
+            var team = kvp.Key;
+            var units = kvp.Value;
+
+            foreach (var unit in units)
+            {
+                _shapeViewPoolService.Return(unit.Shape);
+
+                unit.ResetView();
+                _gameData.UnitViewPool.ReturnToPool(unit);
+            }
+        }
+
+        _gameData.CurrentUnitsInBattle.Clear();
+    }
+}

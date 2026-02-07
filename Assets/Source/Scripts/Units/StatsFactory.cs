@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-public class StatsFactory
+﻿public class StatsFactory
 {
     private readonly UnitModifierConfig _config;
 
@@ -13,13 +11,13 @@ public class StatsFactory
     {
         IStats stats = new BaseStats(_config.UnitBaseConfig);
 
-        var shapeMod = _config.Shapes.First(x => x.ShapeType == shape).ShapeStatsModifier;
+        var shapeMod = _config.GetShape(shape);
         stats = new ShapeStatsDecorator(stats, shapeMod);
 
-        var sizeMod = _config.Sizes.First(x => x.SizeType == size).SizeStatsModifier;
+        var sizeMod = _config.GetSize(size);
         stats = new SizeStatsDecorator(stats, sizeMod);
 
-        var colorMod = _config.Colors.First(x => x.ColorType == color).ColorStatsModifier;
+        var colorMod = _config.GetColor(color);
         stats = new ColorStatsDecorator(stats, colorMod);
 
         return stats;

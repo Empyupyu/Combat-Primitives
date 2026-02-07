@@ -8,6 +8,7 @@ public class GameConfigsInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
+        _unitModifierConfig.Init();
         Container.BindInstance(_prefabsKeyPath).AsSingle();
         Container.BindInstance(_unitModifierConfig).AsSingle();
         Container.Bind<GameData>().AsSingle();

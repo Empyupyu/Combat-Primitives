@@ -15,12 +15,12 @@ MonoBehaviour:
   <UnitBaseConfig>k__BackingField: {fileID: 11400000, guid: 9257442529248914aaf54558f0a0583d, type: 2}
   <Shapes>k__BackingField:
   - ShapeType: 0
-    ShapeMesh: {fileID: 6868368794359222981, guid: 413e158e72bc0e14ab906c436d0a478d, type: 3}
+    ShapeView: {fileID: 7386486269059900881, guid: 413e158e72bc0e14ab906c436d0a478d, type: 3}
     ShapeStatsModifier:
       HP: 100
       ATK: 10
   - ShapeType: 1
-    ShapeMesh: {fileID: 5667014079644355192, guid: 27c36787b6c2baf4d88c3fdadc777ca0, type: 3}
+    ShapeView: {fileID: 1338342562276199925, guid: 27c36787b6c2baf4d88c3fdadc777ca0, type: 3}
     ShapeStatsModifier:
       HP: 50
       ATK: 20
@@ -28,9 +28,13 @@ MonoBehaviour:
   - SizeType: 0
     SizeStatsModifier:
       HP: 50
+      Size: 1
+      OriginalSize: {x: 0.5, y: 0.5, z: 0.5}
   - SizeType: 1
     SizeStatsModifier:
       HP: -50
+      Size: 0.6
+      OriginalSize: {x: 0.5, y: 0.5, z: 0.5}
   <Colors>k__BackingField:
   - ColorType: 0
     ColorStatsModifier:
@@ -38,15 +42,18 @@ MonoBehaviour:
       ATK: -15
       SPEED: 10
       ATKSPD: 4
+      ColorMaterial: {fileID: 2100000, guid: d79aa5875b815a14ea74a43db561fd8e, type: 2}
   - ColorType: 1
     ColorStatsModifier:
       HP: -50
       ATK: 20
       SPEED: -5
       ATKSPD: 0
+      ColorMaterial: {fileID: 2100000, guid: cab52df4a5aaf0341aa9b563fb059075, type: 2}
   - ColorType: 2
     ColorStatsModifier:
       HP: 200
       ATK: 40
       SPEED: -9
       ATKSPD: 0
+      ColorMaterial: {fileID: 2100000, guid: e491df66a51831648940b857b0bd8c63, type: 2}

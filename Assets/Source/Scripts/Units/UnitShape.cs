@@ -1,11 +1,10 @@
 ﻿using System;
-using UnityEngine;
 
 [Serializable]
 public class UnitShape
 {
     public ShapeType ShapeType;
-    public GameObject ShapeMesh;
+    public ShapeView ShapeView;
     public ShapeStatsModifier ShapeStatsModifier;
 }
 
