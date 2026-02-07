@@ -4,7 +4,7 @@ public class LevelInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        Container.Bind<UnitSpawnStrategy>().To<CircleSpawnStrategy>().AsSingle().WithArguments(1.2f);
+        Container.Bind<UnitSpawnStrategy>().To<CircleSpawnStrategy>().AsSingle();
         Container.Bind<IStatsCreatorStrategy>().To<RandomStatsCreatorStrategy>().AsSingle();
         Container.Bind<StatsFactory>().AsSingle();
         Container.Bind<StatsCreator>().AsSingle();
@@ -15,8 +15,7 @@ public class LevelInstaller : MonoInstaller
             {
                 var controller = ctx.Container.Resolve<UnitSpawnController>();
                 controller.RegisterSpawner(spawner);
-            });
-
-        Container.Resolve<UnitSpawner>();
+            })
+            .NonLazy();
     }
 }

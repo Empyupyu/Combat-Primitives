@@ -121,7 +121,8 @@ public class UnitSpawner
         var colorMod = _unitModifierConfig.GetColor(unitStatsSetup.ColorType);
 
         unitView.Shape.transform.localScale = sizeMod.OriginalSize * sizeMod.Size;
-        unitView.SetColor(colorMod.ColorMaterial);
+        unitView.Shape.transform.localPosition = unitView.Shape.transform.localScale / 2;
+        unitView.SetColor(colorMod.Color);
     }
 
     private void CreateShapeView(UnitView unitView, UnitStatsSetup unitStatsSetup)

@@ -3,6 +3,7 @@ using System;
 public class Unit
 {
     public event Action<Unit> OnDie;
+    public event Action<float, float> OnHealthChange;
     public UnitTeam UnitTeam { get; private set; }
     public float CurrentHealth { get; private set; }
     public IStats Stats { get; private set; }
@@ -27,6 +28,8 @@ public class Unit
             CurrentHealth = 0;
             Die();
         }
+
+        OnHealthChange?.Invoke(CurrentHealth, Stats.HP);
     }
 
     private void Die()

@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using System.Diagnostics;
 using System.Threading;
 
 public class AttackState : IState<UnitState>

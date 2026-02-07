@@ -9,8 +9,6 @@ public class StateMachineInstaller : MonoInstaller
         StateMachineMonoInstall();
         GameStateInstall();
         GameStateMachineInstall();
-
-        Container.BindInterfacesAndSelfTo<GameStartInitializer>().AsSingle();
     }
 
     private void StateMachineMonoInstall()
@@ -35,7 +33,5 @@ public class StateMachineInstaller : MonoInstaller
     private void GameStateMachineInstall()
     {
         Container.Bind<StateMachine<GameState>>().AsSingle();
-
-        _stateMachine.SetStateMachine(Container.Resolve<StateMachine<GameState>>());
     }
 }

@@ -8,6 +8,6 @@ public class ColorStatsModifier
     public float ATK;
     public float SPEED;
     public float ATKSPD;
-    public Material ColorMaterial;
+    public Color Color;
 }
 

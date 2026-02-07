@@ -42,18 +42,18 @@ MonoBehaviour:
       ATK: -15
       SPEED: 10
       ATKSPD: 4
-      ColorMaterial: {fileID: 2100000, guid: d79aa5875b815a14ea74a43db561fd8e, type: 2}
+      Color: {r: 0.2028302, g: 0.61519635, b: 1, a: 0}
   - ColorType: 1
     ColorStatsModifier:
       HP: -50
       ATK: 20
       SPEED: -5
       ATKSPD: 0
-      ColorMaterial: {fileID: 2100000, guid: cab52df4a5aaf0341aa9b563fb059075, type: 2}
+      Color: {r: 0.25295225, g: 0.8396226, b: 0.22574759, a: 0}
   - ColorType: 2
     ColorStatsModifier:
       HP: 200
       ATK: 40
       SPEED: -9
       ATKSPD: 0
-      ColorMaterial: {fileID: 2100000, guid: e491df66a51831648940b857b0bd8c63, type: 2}
+      Color: {r: 0.8018868, g: 0.1021271, b: 0.1021271, a: 0}

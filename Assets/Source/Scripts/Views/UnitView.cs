@@ -21,6 +21,7 @@ public class UnitView : MonoBehaviour
         Agent.speed *= fakeSpeedMultiply;
 
         Unit.OnDie += HandleDeath;
+        Unit.OnHealthChange += HandleHealthChanged;
     }
 
     public void SetShape(ShapeView shape)
@@ -28,14 +29,23 @@ public class UnitView : MonoBehaviour
         Shape = shape;
     }
 
-    public void SetColor(Material color)
+    public void SetColor(Color color)
     {
-        Shape.MeshRenderer.material = color;
+        Shape.MeshRenderer.material.SetFloat("_Fill_Height", 1);
+        Shape.MeshRenderer.material.SetColor("_Fill_Color", color);
     }
 
     public void SetTarget(UnitView target)
     {
         Target = target;
+    }
+
+    private void HandleHealthChanged(float current, float max)
+    {
+        float normalized = current / max;
+        float shaderValue = normalized * 2f - 1f;
+
+        Shape.MeshRenderer.material.SetFloat("_Fill_Height", shaderValue);
     }
 
     private void HandleDeath(Unit unit) 
@@ -51,6 +61,7 @@ public class UnitView : MonoBehaviour
         if (Unit != null)
         {
             Unit.OnDie -= HandleDeath;
+            Unit.OnHealthChange -= HandleHealthChanged;
             Unit = null;
         }
 
@@ -64,12 +75,14 @@ public class UnitView : MonoBehaviour
             Shape.gameObject.SetActive(false);
             Shape = null;
         }
-
     }
 
     private void OnDisable()
     {
         if(Unit != null)
+        {
             Unit.OnDie -= HandleDeath;
+            Unit.OnHealthChange -= HandleHealthChanged;
+        }
     }
 }
