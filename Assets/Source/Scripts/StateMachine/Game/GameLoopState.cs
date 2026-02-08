@@ -43,7 +43,6 @@ public class GameLoopState : IState<GameState>
 
     public override async UniTask Exit()
     {
-        int fakeDelay = 1000;
-        await UniTask.Delay(fakeDelay);
+        await UniTask.Delay(Constants.DelayBeforeEndGameLoopState);
     }
 }

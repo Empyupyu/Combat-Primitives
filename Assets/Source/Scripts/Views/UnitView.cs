@@ -15,10 +15,9 @@ public class UnitView : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         Unit = unit;
-        float fakeSpeedMultiply = .3f;
 
         Agent.speed = Unit.Stats.SPEED;
-        Agent.speed *= fakeSpeedMultiply;
+        Agent.speed *= Constants.UnitSpeedMultiply;
 
         Unit.OnDie += HandleDeath;
         Unit.OnHealthChange += HandleHealthChanged;

@@ -30,7 +30,7 @@ public class AttackState : IState<UnitState>
     {
         if (!_availableAttack)
         {
-            await UniTask.Delay((int)(_unitView.Unit.Stats.ATKSPD * 200), cancellationToken: token);
+            await UniTask.Delay((int)(_unitView.Unit.Stats.ATKSPD * Constants.UnitAttackSpeedMultiply), cancellationToken: token);
             _availableAttack = true;
         }
 
