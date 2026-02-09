@@ -8,5 +8,6 @@ public class ControllerInstaller : MonoInstaller
         Container.Bind<UnitSpawnController>().AsSingle();
         Container.Bind<DamageService>().AsSingle();
         Container.Bind<BattleController>().AsSingle();
+        Container.Bind<UnitsController>().AsSingle();
     }
 }

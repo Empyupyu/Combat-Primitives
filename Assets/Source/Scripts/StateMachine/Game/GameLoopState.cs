@@ -5,34 +5,23 @@ public class GameLoopState : IState<GameState>
     public override GameState Key => GameState.GameLoopState;
 
     private readonly BattleController _battleController;
-    private readonly GameData _gameData;
+    private readonly UnitsController _unitsController;
 
     public GameLoopState(IStateSwitcher<GameState> stateSwitcher,
         BattleController battleController,
-        GameData gameData) : base(stateSwitcher)
+        UnitsController unitsController) : base(stateSwitcher)
     {
         _battleController = battleController;
-        _gameData = gameData;
+        _unitsController = unitsController;
     }
 
     public override async UniTask Enter()
     {
         _battleController.OnBattleFinished += LevelEnd;
 
-        SetUnitsChaseState();
+        _unitsController.SetAllUnitsState(UnitState.Chase);
 
         await UniTask.CompletedTask;
-    }
-
-    private void SetUnitsChaseState()
-    {
-        foreach (var kvp in _gameData.CurrentUnitsInBattle)
-        {
-            foreach (var unitView in kvp.Value)
-            {
-                unitView.UnitStateMachineMono.SwitchState(UnitState.Chase).Forget();
-            }
-        }
     }
 
     private void LevelEnd()
